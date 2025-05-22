@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 import random
 
 # Set page layout
-st.set_page_config(page_title="YOLOv8 Detection App", layout="centered")
-st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🔍 YOLOv8 Object Detection</h1>", unsafe_allow_html=True)
+st.set_page_config(page_title="Object Detection App", layout="centered")
+st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🔍 3D Printing Defect Detection</h1>", unsafe_allow_html=True)
 
 # Load YOLOv8 model
 model = YOLO("best.pt")
@@ -74,4 +74,4 @@ else:
     st.markdown("📥 Upload an image from the sidebar to get started.")
 
 st.markdown("<hr>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Made with ❤️ by Azeem Aslam | Powered by YOLOv8 + Streamlit</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Made with ❤️ by Azeem Aslam | Powered by YOLO + Streamlit</p>", unsafe_allow_html=True)
