@@ -1,29 +1,55 @@
+# Enhanced version of app.py with better UI using Streamlit features
+
+enhanced_app_code = '''
 import streamlit as st
 import cv2
 import numpy as np
 from PIL import Image
 from ultralytics import YOLO
 
-model = YOLO("best.pt")  # Make sure this file is in the same directory
+# Page settings
+st.set_page_config(page_title="YOLOv8 Detector", layout="centered")
+st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🔍 YOLOv8 Object Detection</h1>", unsafe_allow_html=True)
 
-st.title("YOLOv8 Object Detection Web App")
-st.write("Upload an image and detect objects using YOLOv8!")
+# Load model
+model = YOLO("best.pt")
 
-uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+# Upload section
+st.sidebar.header("📤 Upload Image")
+uploaded_file = st.sidebar.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
-    image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", use_container_width=True)
+    image = Image.open(uploaded_file).convert("RGB")
+    st.markdown("### 📸 Uploaded Image")
+    st.image(image, use_container_width=True)
 
-    img_np = np.array(image)
-    img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
-    results = model(img_bgr)[0]
+    with st.spinner("Running YOLOv8 Detection..."):
+        img_np = np.array(image)
+        img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+        results = model(img_bgr)[0]
 
-    for box in results.boxes:
-        x1, y1, x2, y2 = map(int, box.xyxy[0])
-        label = model.names[int(box.cls[0])]
-        conf = float(box.conf[0])
-        cv2.rectangle(img_bgr, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(img_bgr, f"{label} {conf:.2f}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+        # Draw results
+        for box in results.boxes:
+            x1, y1, x2, y2 = map(int, box.xyxy[0])
+            label = model.names[int(box.cls[0])]
+            conf = float(box.conf[0])
+            cv2.rectangle(img_bgr, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.putText(img_bgr, f"{label} {conf:.2f}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
 
-    st.image(cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB), caption="Detection Result", use_column_width=True)
+        result_img = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+
+    st.markdown("### ✅ Detection Result")
+    st.image(result_img, use_container_width=True)
+else:
+    st.markdown("📥 Upload an image from the sidebar to get started.")
+
+st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Made with ❤️ by Azeem Aslam | Powered by YOLOv8 + Streamlit</p>", unsafe_allow_html=True)
+'''
+
+# Save enhanced app.py
+enhanced_path = "/mnt/data/app_enhanced.py"
+with open(enhanced_path, "w") as f:
+    f.write(enhanced_app_code.strip())
+
+enhanced_path
