@@ -1,6 +1,3 @@
-# Enhanced version of app.py with better UI using Streamlit features
-
-enhanced_app_code = '''
 import streamlit as st
 import cv2
 import numpy as np
@@ -45,11 +42,3 @@ else:
 
 st.markdown("<hr>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Made with ❤️ by Azeem Aslam | Powered by YOLOv8 + Streamlit</p>", unsafe_allow_html=True)
-'''
-
-# Save enhanced app.py
-enhanced_path = "/mnt/data/app_enhanced.py"
-with open(enhanced_path, "w") as f:
-    f.write(enhanced_app_code.strip())
-
-enhanced_path
