@@ -30,8 +30,9 @@ if uploaded_file:
             x1, y1, x2, y2 = map(int, box.xyxy[0])
             label = model.names[int(box.cls[0])]
             conf = float(box.conf[0])
-            cv2.rectangle(img_bgr, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(img_bgr, f"{label} {conf:.2f}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+            text = f"{label.upper()} {conf:.2f}"
+            cv2.rectangle(img_bgr, (x1, y1), (x2, y2), (0, 255, 0), 4)  # Thicker box
+            cv2.putText(img_bgr, text, (x1, y1 - 12), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 3, cv2.LINE_AA)  # Bolder label
 
         result_img = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
 
