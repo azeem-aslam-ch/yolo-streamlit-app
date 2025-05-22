@@ -5,6 +5,7 @@ from PIL import Image
 from ultralytics import YOLO
 import pandas as pd
 import io
+import matplotlib.pyplot as plt
 
 # Page config
 st.set_page_config(page_title="YOLOv8 Detector", layout="centered")
@@ -13,7 +14,7 @@ st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🔍 YOLOv8 Object 
 # Load model
 model = YOLO("best.pt")
 
-# Sidebar image upload
+# Upload image
 st.sidebar.header("📤 Upload Image")
 uploaded_file = st.sidebar.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
@@ -37,9 +38,12 @@ if uploaded_file:
             cv2.putText(img_bgr, text, (x1, y1 - 12), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 3, cv2.LINE_AA)
 
             detection_data.append({
-                "Label": label,
-                "Confidence": round(conf, 2),
-                "X1": int(x1), "Y1": int(y1), "X2": int(x2), "Y2": int(y2)
+                "Detected Defect": label,
+                "Confidence Score (0-1)": round(conf, 2),
+                "Top-Left X": int(x1),
+                "Top-Left Y": int(y1),
+                "Bottom-Right X": int(x2),
+                "Bottom-Right Y": int(y2)
             })
 
         result_img = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
@@ -47,22 +51,26 @@ if uploaded_file:
     st.markdown("### ✅ Detection Result")
     st.image(result_img, use_container_width=True)
 
-    # Show summary table
+    # Show results
     if detection_data:
-        st.markdown("### 📊 Detection Summary")
         df = pd.DataFrame(detection_data)
+        st.markdown("### 📊 Detection Summary (Explanation Table)")
         st.dataframe(df, use_container_width=True)
 
-        # Convert to downloadable image
+        # Download button
         is_success, buffer = cv2.imencode(".png", result_img)
         io_buf = io.BytesIO(buffer)
+        st.download_button("💾 Download Result Image", data=io_buf, file_name="detection_result.png", mime="image/png")
 
-        st.download_button(
-            label="💾 Download Result Image",
-            data=io_buf,
-            file_name="detection_result.png",
-            mime="image/png"
-        )
+        # Visual chart
+        st.markdown("### 📈 Defect Frequency Chart")
+        chart_data = df["Detected Defect"].value_counts()
+        fig, ax = plt.subplots()
+        chart_data.plot(kind="bar", color="skyblue", ax=ax)
+        ax.set_xlabel("Defect Type")
+        ax.set_ylabel("Number of Detections")
+        ax.set_title("Detected Defect Types")
+        st.pyplot(fig)
 else:
     st.markdown("📥 Upload an image from the sidebar to get started.")
 
