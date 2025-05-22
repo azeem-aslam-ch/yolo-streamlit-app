@@ -6,7 +6,7 @@ from ultralytics import YOLO
 
 # Page settings
 st.set_page_config(page_title="Object Detector", layout="centered")
-st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🔍 FDM 3D Printing Defect Detection</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🔍 3D Printing Defect Detection</h1>", unsafe_allow_html=True)
 
 # Load model
 model = YOLO("best.pt")
