@@ -46,7 +46,13 @@ This is a simple and intuitive **YOLOv8-based web app** built using **Streamlit*
 ```bash
 pip install -r requirements.txt
 
----
+
+2. Run the app
+
+streamlit run app.py
+
+
+
 🌐 Deploy to Streamlit Cloud
 Push this code to a public GitHub repository
 
@@ -55,3 +61,6 @@ Go to streamlit.io/cloud
 Select your repo and point to app.py
 
 Add requirements.txt and packages.txt for dependencies
+
+
+
