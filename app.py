@@ -3,71 +3,75 @@ import cv2
 import numpy as np
 from PIL import Image
 from ultralytics import YOLO
-import tempfile
-import os
+import pandas as pd
+import io
+import matplotlib.pyplot as plt
+import random
 
-# Set Streamlit layout
-st.set_page_config(page_title="YOLOv8 Realtime + Batch", layout="centered")
-st.markdown("<h1 style='text-align: center; color: #4CAF50;'>📹 YOLOv8 Webcam & Batch Detection</h1>", unsafe_allow_html=True)
+# Set page layout
+st.set_page_config(page_title="YOLOv8 Detection App", layout="centered")
+st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🔍 YOLOv8 Object Detection</h1>", unsafe_allow_html=True)
 
-# Load model
+# Load YOLOv8 model
 model = YOLO("best.pt")
 
-# Sidebar options
-mode = st.sidebar.radio("Choose Mode", ["📷 Webcam Detection", "🖼️ Upload Multiple Images"])
+# Sidebar inputs
+st.sidebar.header("📤 Upload and Filter")
+uploaded_file = st.sidebar.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
+conf_threshold = st.sidebar.slider("Confidence Threshold", 0.0, 1.0, 0.5, 0.01)
 
-# Webcam Detection Mode
-if mode == "📷 Webcam Detection":
-    st.markdown("### Live Webcam Feed (press Stop to end)")
-    run = st.checkbox("Start Webcam")
+# Color map per class
+colors = {}
+for i, name in model.names.items():
+    colors[name] = [random.randint(0, 255) for _ in range(3)]
 
-    FRAME_WINDOW = st.image([])
-    cap = cv2.VideoCapture(0)
+if uploaded_file:
+    image = Image.open(uploaded_file).convert("RGB")
+    st.markdown("### 📸 Uploaded Image")
+    st.image(image, use_container_width=True)
 
-    while run:
-        ret, frame = cap.read()
-        if not ret:
-            st.warning("Failed to grab frame.")
-            break
-        results = model(frame, conf=0.5)[0]
+    with st.spinner("Running Detection..."):
+        img_np = np.array(image)
+        img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+        results = model(img_bgr, conf=conf_threshold)[0]
 
+        detection_data = []
         for box in results.boxes:
-            x1, y1, x2, y2 = map(int, box.xyxy[0])
-            label = model.names[int(box.cls[0])]
             conf = float(box.conf[0])
+            if conf < conf_threshold:
+                continue
+            x1, y1, x2, y2 = map(int, box.xyxy[0])
+            cls_id = int(box.cls[0])
+            label = model.names[cls_id]
+            color = colors[label]
             text = f"{label.upper()} {conf:.2f}"
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(frame, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+            cv2.rectangle(img_bgr, (x1, y1), (x2, y2), color, 4)
+            cv2.putText(img_bgr, text, (x1, y1 - 12), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 3, cv2.LINE_AA)
 
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        FRAME_WINDOW.image(frame)
+            detection_data.append({
+                "Detected Defect": label,
+                "Confidence Score (0-1)": round(conf, 2),
+                "Top-Left X": x1, "Top-Left Y": y1,
+                "Bottom-Right X": x2, "Bottom-Right Y": y2
+            })
 
-    cap.release()
+        result_img = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
 
-# Multi-image Batch Detection Mode
-elif mode == "🖼️ Upload Multiple Images":
-    uploaded_files = st.sidebar.file_uploader("Upload multiple images", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+    st.markdown("### ✅ Detection Result")
+    st.image(result_img, use_container_width=True)
 
-    if uploaded_files:
-        for uploaded_file in uploaded_files:
-            image = Image.open(uploaded_file).convert("RGB")
-            st.markdown(f"### 🖼️ {uploaded_file.name}")
-            st.image(image, width=400)
+    if detection_data:
+        df = pd.DataFrame(detection_data)
+        st.markdown("### 📊 Detection Summary (Explanation Table)")
+        st.dataframe(df, use_container_width=True)
 
-            img_np = np.array(image)
-            img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
-            results = model(img_bgr, conf=0.5)[0]
+        is_success, buffer = cv2.imencode(".png", result_img)
+        io_buf = io.BytesIO(buffer)
+        st.download_button("💾 Download Result Image", data=io_buf, file_name="detection_result.png", mime="image/png")
 
-            for box in results.boxes:
-                x1, y1, x2, y2 = map(int, box.xyxy[0])
-                label = model.names[int(box.cls[0])]
-                conf = float(box.conf[0])
-                text = f"{label.upper()} {conf:.2f}"
-                cv2.rectangle(img_bgr, (x1, y1), (x2, y2), (255, 0, 0), 3)
-                cv2.putText(img_bgr, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
-
-            result_img = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
-            st.image(result_img, caption="Detection Result", use_column_width=True)
+       
+else:
+    st.markdown("📥 Upload an image from the sidebar to get started.")
 
 st.markdown("<hr>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Made with ❤️ by Azeem Aslam | Powered by YOLOv8 + Streamlit</p>", unsafe_allow_html=True)
