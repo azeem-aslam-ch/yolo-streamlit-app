@@ -5,8 +5,8 @@ from PIL import Image
 from ultralytics import YOLO
 
 # Page settings
-st.set_page_config(page_title="YOLOv8 Detector", layout="centered")
-st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🔍 YOLOv8 Object Detection</h1>", unsafe_allow_html=True)
+st.set_page_config(page_title="Object Detector", layout="centered")
+st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🔍 FDM 3D Printing Defect Detection</h1>", unsafe_allow_html=True)
 
 # Load model
 model = YOLO("best.pt")
