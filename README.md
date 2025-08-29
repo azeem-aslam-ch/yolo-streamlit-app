@@ -53,7 +53,7 @@ streamlit run app.py
 
 
 
-### 🌐 Deploy to Streamlit Cloud
+#### 🌐 Deploy to Streamlit Cloud
 Push this code to a public GitHub repository
 
 Go to streamlit.io/cloud
@@ -63,7 +63,7 @@ Select your repo and point to app.py
 Add requirements.txt and packages.txt for dependencies
 
 
-### 🐳 Run with Docker
+#### 🐳 Run with Docker
 If you have Docker installed, you can run this application with a single command without needing to install any Python packages locally.
 
 Pull the image from Docker Hub:
