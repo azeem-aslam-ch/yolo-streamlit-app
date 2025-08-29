@@ -11,8 +11,6 @@ An intuitive web application built with Streamlit and powered by YOLOv8 for real
 
 
 
----
-
 ## 🚀 Overview
 
 This project provides a simple yet powerful tool for industrial quality control and other defect detection tasks. The application allows users to upload an image and receive immediate visual feedback with bounding boxes drawn around detected defects. It also generates a comprehensive data table with class predictions, confidence scores, and coordinates for each detected object.
