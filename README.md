@@ -1,79 +1,90 @@
-# 🧠 YOLOv8 Defect Detection (Single Image App)
+# YOLOv8 Defect Detection Streamlit App
 
-This is a simple and intuitive **YOLOv8-based web app** built using **Streamlit** for detecting defects in a single uploaded image. It highlights detected regions with bounding boxes and provides a detailed table of results.
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.37-red.svg)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
----
-
-## 🚀 Features
-
-- 📤 Upload **one image** at a time
-- ✅ Detect defects using a YOLOv8 trained model
-- 🖼️ View bounding boxes on the image
-- 📋 See a **detection summary table** with:
-  - Detected class (defect)
-  - Confidence score
-  - Bounding box coordinates
-- 💾 Download the processed image with annotations
+An intuitive web application built with Streamlit and powered by YOLOv8 for real-time defect detection in images. Upload an image, and the app will instantly identify and highlight defects, providing detailed analysis and results.
 
 ---
 
-## 🧪 How It Works
-
-1. Upload an image (`.jpg`, `.jpeg`, or `.png`)
-2. The app runs the YOLOv8 model on it
-3. The image is shown with bounding boxes
-4. A table shows all detected objects and details
-5. Optionally, download the image
+*A placeholder for a GIF or screenshot of the app in action would go here.*
+``
 
 ---
 
-## 📂 Project Structure
+## 🚀 Overview
 
-| File              | Description                              |
-|-------------------|------------------------------------------|
-| `app.py`          | Main Streamlit app file                  |
-| `best.pt`         | YOLOv8 trained weights                   |
-| `requirements.txt`| Python dependencies for Streamlit        |
-| `packages.txt`    | System packages for OpenCV on Streamlit Cloud |
-| `README.md`       | This file                                |
+This project provides a simple yet powerful tool for industrial quality control and other defect detection tasks. The application allows users to upload an image and receive immediate visual feedback with bounding boxes drawn around detected defects. It also generates a comprehensive data table with class predictions, confidence scores, and coordinates for each detected object.
+
+### ✨ Key Features
+
+* **Easy Image Upload:** Supports single image uploads (`.jpg`, `.jpeg`, `.png`).
+* **High-Performance Detection:** Utilizes a pre-trained YOLOv8 model for fast and accurate defect detection.
+* **Interactive Visualization:** Displays the output image with clear bounding boxes and labels.
+* **Detailed Analysis:** Provides a summary table of all detected defects with their confidence scores and locations.
+* **Downloadable Results:** Allows users to download the annotated image for reporting and analysis.
 
 ---
 
-## 🛠️ Setup Instructions
+## 🛠️ Tech Stack
 
-### 1. Install Python packages
+This project is built with the following technologies:
 
+* **Python:** Core programming language.
+* **Streamlit:** For building the interactive web application.
+* **PyTorch:** As the backend for the YOLOv8 model.
+* **YOLOv8:** State-of-the-art object detection model from Ultralytics.
+* **OpenCV:** For image processing and handling.
+* **Docker:** For containerizing the application for easy deployment and scalability.
 
-pip install -r requirements.txt
+---
 
+## ⚙️ Getting Started
 
-### 2. Run the app 
+You can run this application in two ways: locally using a Python environment or with Docker.
 
-streamlit run app.py
+### 1. Local Setup Instructions
 
+**Prerequisites:**
+-   Python 3.10 or later
+-   `pip` package manager
 
+**Installation:**
+1.  Clone the repository to your local machine:
+    ```bash
+    git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
+    cd your-repo-name
+    ```
+2.  Install the required Python packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-#### 🌐 Deploy to Streamlit Cloud
-Push this code to a public GitHub repository
+**Running the App:**
+1.  Launch the Streamlit app from your terminal:
+    ```bash
+    streamlit run app.py
+    ```
+2.  The application will open in your default web browser.
 
-Go to streamlit.io/cloud
+### 2. 🐳 Run with Docker
 
-Select your repo and point to app.py
+If you have Docker installed, you can run the application in a container with a single command, without worrying about local dependencies.
 
-Add requirements.txt and packages.txt for dependencies
+1.  **Pull the pre-built image from Docker Hub:**
+    ```bash
+    docker pull azeemaslamch/yolo-streamlit-app:latest
+    ```
+2.  **Run the container:**
+    ```bash
+    docker run -p 8501:8501 azeemaslamch/yolo-streamlit-app:latest
+    ```
+3.  Open your web browser and navigate to `http://localhost:8501`.
 
+---
 
-#### 🐳 Run with Docker
-If you have Docker installed, you can run this application with a single command without needing to install any Python packages locally.
+## 📄 License
 
-Pull the image from Docker Hub:
-
-docker pull azeemaslamch/yolo-streamlit-app:latest
-
-Run the container:
-
-docker run -p 8501:8501 azeemaslamch/yolo-streamlit-app:latest
-
-Open your web browser and go to http://localhost:8501.
-
-
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
