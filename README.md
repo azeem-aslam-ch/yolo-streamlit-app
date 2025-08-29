@@ -63,4 +63,17 @@ Select your repo and point to app.py
 Add requirements.txt and packages.txt for dependencies
 
 
+🐳 Run with Docker
+If you have Docker installed, you can run this application with a single command without needing to install any Python packages locally.
+
+Pull the image from Docker Hub:
+
+docker pull azeemaslamch/yolo-streamlit-app:latest
+
+Run the container:
+
+docker run -p 8501:8501 azeemaslamch/yolo-streamlit-app:latest
+
+Open your web browser and go to http://localhost:8501.
+
 
