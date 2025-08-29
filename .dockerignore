@@ -1,0 +1,13 @@
+.git
+__pycache__/
+*.pyc
+*.pyo
+*.DS_Store
+.venv
+.devcontainer/
+*.zip
+*.tar
+*.tar.gz
+*.onnx
+outputs/
+data/
