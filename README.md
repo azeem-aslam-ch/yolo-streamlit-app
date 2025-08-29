@@ -9,8 +9,7 @@ An intuitive web application built with Streamlit and powered by YOLOv8 for real
 
 ---
 
-*A placeholder for a GIF or screenshot of the app in action would go here.*
-``
+
 
 ---
 
