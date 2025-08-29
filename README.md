@@ -43,7 +43,7 @@ This is a simple and intuitive **YOLOv8-based web app** built using **Streamlit*
 
 ### 1. Install Python packages
 
-```bash
+
 pip install -r requirements.txt
 
 
